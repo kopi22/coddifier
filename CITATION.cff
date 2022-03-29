@@ -1,0 +1,12 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: >-
+  Preservation of Codd semantics in databases with
+  SQL nulls
+message: 'A Java library for testing whether an RA query is guaranteed to preserve Codd semantics. Developed as a part of the Masters Project. If you use this software, please cite it as below.'
+type: software
+authors:
+  - given-names: Konrad
+    family-names: Pijanowski
