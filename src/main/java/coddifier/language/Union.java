@@ -20,7 +20,7 @@ public class Union extends BinaryExpression {
     }
 
     @Override
-    protected boolean isMarked() {
+    protected boolean satisfiesSufficientConditions() {
         return djb || nnc || nna;
     }
 

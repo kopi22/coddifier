@@ -3,6 +3,7 @@ package coddifier.language;
 import coddifier.db.Schema;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -16,22 +17,22 @@ public class Relation extends Expression {
 
     @Override
     public boolean isWellDefined(Schema schema) {
-        return schema.hasTable(name);
+        return schema.hasRelation(name);
     }
 
     @Override
-    protected boolean isMarked() {
+    protected boolean satisfiesSufficientConditions() {
         return true;
     }
 
     @Override
     protected Set<String> computeSignature(Schema schema) {
-        return schema.getTableAttributeNames(name);
+        return new HashSet<>(schema.getRelationAttributeNames(name));
     }
 
     @Override
     protected Set<String> computeNullableSignature(Schema schema) {
-        return schema.getTableNullableAttributeNames(name);
+        return new HashSet<>(schema.getRelationNullableAttributeNames(name));
     }
 
     @Override

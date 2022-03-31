@@ -17,7 +17,7 @@ public class Distinct extends UnaryExpression {
     }
 
     @Override
-    protected boolean isMarked() {
+    protected boolean satisfiesSufficientConditions() {
         return nnc;
     }
 

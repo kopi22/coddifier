@@ -1,6 +1,7 @@
 package coddifier.language;
 
 import coddifier.db.Attribute;
+import coddifier.db.Schema;
 import coddifier.db.SimpleSchema;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RenamingTest {
 
-    static SimpleSchema schema;
+    static Schema schema;
     static Relation relationR;
 
     static Map<String, String> replacements;
@@ -22,11 +23,12 @@ class RenamingTest {
 
     @BeforeAll
     static void setUpAll() {
-        schema = new SimpleSchema();
-        schema.addTable("R", Set.of(
+        var sb = new SimpleSchema.Builder();
+        sb.addTable("R", Set.of(
                 new Attribute("A", false),
                 new Attribute("B", true)
         ));
+        schema = sb.build();
 
         relationR  = new Relation("R");
 
@@ -82,7 +84,7 @@ class RenamingTest {
 
     @Test
     void isMarked() {
-        assertTrue(renaming.isMarked());
+        assertTrue(renaming.satisfiesSufficientConditions());
     }
 
     @Test

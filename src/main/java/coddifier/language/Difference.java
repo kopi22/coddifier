@@ -19,7 +19,7 @@ public class Difference extends BinaryExpression {
     }
 
     @Override
-    protected boolean isMarked() {
+    protected boolean satisfiesSufficientConditions() {
         return djn;
     }
 

@@ -5,6 +5,7 @@ import coddifier.db.Schema;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class Projection extends UnaryExpression {
     private final Set<String> retainedAttributes;
@@ -20,7 +21,7 @@ public class Projection extends UnaryExpression {
     }
 
     @Override
-    protected boolean isMarked() {
+    protected boolean satisfiesSufficientConditions() {
         return true;
     }
 

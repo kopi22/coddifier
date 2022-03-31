@@ -22,7 +22,7 @@ public class Product extends BinaryExpression {
     }
 
     @Override
-    protected boolean isMarked() {
+    protected boolean satisfiesSufficientConditions() {
         return nna;
     }
 

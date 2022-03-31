@@ -31,11 +31,16 @@ public abstract class Expression {
     public abstract boolean isWellDefined(Schema schema);
 
     public boolean isGuaranteedToPreserveCoddSemantics(Schema schema) {
-        // step 1: compute properties
+        // step 1: ensure the expression is well-defined
+        if (!isWellDefined(schema)) {
+            throw new SchemaException();
+        }
+
+        // step 2: compute properties
         getNullableSignature(schema);
         getBaseNames();
 
-        // step 2: annotate syntax tree
+        // step 3: annotate syntax tree
         annotateWithSufficientConditions(schema, false);
 
         // step 3: check if every node meets its sufficient condition
@@ -53,8 +58,8 @@ public abstract class Expression {
 
     private boolean isSyntaxTreeMarked() {
         System.out.println(this);
-        System.out.printf("djn: %s, nnc: %s, djb: %s, nna: %s, is_marked: %s%n", djn, nnc, djb, nna, isMarked());
-        if (!isMarked()) {
+        System.out.printf("djn: %s, nnc: %s, djb: %s, nna: %s, is_marked: %s%n", djn, nnc, djb, nna, satisfiesSufficientConditions());
+        if (!satisfiesSufficientConditions()) {
             // if the node is not marked, then query does not meet sufficient conditions
             return false;
         }
@@ -69,7 +74,7 @@ public abstract class Expression {
         return true;
     }
 
-    protected abstract boolean isMarked();
+    protected abstract boolean satisfiesSufficientConditions();
 
     protected boolean satisfiesNNC(Schema schema) {
         if (children.isEmpty()) {
@@ -179,6 +184,12 @@ public abstract class Expression {
     }
 
     public abstract Expression clone(List<Expression> newChildren);
+
+    @Override
+    public int hashCode() {
+        // TODO: incorporate expression type into the hash
+        return Objects.hash(children);
+    }
 
     @Override
     public boolean equals(Object other) {

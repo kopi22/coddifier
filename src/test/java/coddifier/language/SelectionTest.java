@@ -1,6 +1,7 @@
 package coddifier.language;
 
 import coddifier.db.Attribute;
+import coddifier.db.Schema;
 import coddifier.db.SimpleSchema;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SelectionTest {
 
-    static SimpleSchema schema;
+    static Schema schema;
     static Relation relationR;
 
     static Condition condition;
@@ -24,15 +25,16 @@ class SelectionTest {
 
     @BeforeAll
     static void setUpAll() {
-        schema = new SimpleSchema();
-        schema.addTable("R", Set.of(
+        var sb = new SimpleSchema.Builder();
+        sb.addTable("R", Set.of(
                 new Attribute("A", true),
                 new Attribute("B", true)
         ));
-        schema.addTable("S", Set.of(
+        sb.addTable("S", Set.of(
                 new Attribute("A", true),
                 new Attribute("B", true)
         ));
+        schema = sb.build();
 
         relationR  = new Relation("R");
 
@@ -73,7 +75,7 @@ class SelectionTest {
 
     @Test
     void isMarked() {
-        assertTrue(selection.isMarked());
+        assertTrue(selection.satisfiesSufficientConditions());
     }
 
     @Test

@@ -28,7 +28,7 @@ public class Intersection extends Expression {
     }
 
     @Override
-    protected boolean isMarked() {
+    protected boolean satisfiesSufficientConditions() {
         return djn;
     }
 

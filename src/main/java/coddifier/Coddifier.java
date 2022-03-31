@@ -14,13 +14,10 @@ public class Coddifier {
 
     public static boolean isGuaranteedToPreserveCoddSemantics(Expression expression, Schema schema) {
         var normalizedExpression = irfTransformation.transform(expression);
-        return isGuaranteedToPreserveCoddSemanticsAsIs(normalizedExpression, schema);
+        return normalizedExpression.isGuaranteedToPreserveCoddSemantics(schema);
     }
 
     public static boolean isGuaranteedToPreserveCoddSemanticsAsIs(Expression expression, Schema schema) {
-        if (!expression.isWellDefined(schema)) {
-            throw new SchemaException();
-        }
         return expression.isGuaranteedToPreserveCoddSemantics(schema);
     }
 }

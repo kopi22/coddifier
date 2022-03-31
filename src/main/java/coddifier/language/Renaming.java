@@ -4,6 +4,7 @@ import coddifier.db.Schema;
 import coddifier.db.SchemaException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Renaming extends UnaryExpression {
 
@@ -29,7 +30,7 @@ public class Renaming extends UnaryExpression {
     }
 
     @Override
-    protected boolean isMarked() {
+    protected boolean satisfiesSufficientConditions() {
         return true;
     }
 
@@ -79,12 +80,8 @@ public class Renaming extends UnaryExpression {
     @Override
     public String toString() {
         if (repr == null) {
-            String repl = renamings.toString()
-                    .replace(" ", "")
-                    .replace("{", "[")
-                    .replace("}", "]")
-                    .replace("=", "->");
-            repr = String.format("\u03c1%s( %s )", repl, getChild().toString());
+            String repl = new TreeMap<>(renamings).entrySet().stream().map(e -> e.getKey() + "->" + e.getValue()).collect(Collectors.joining(","));
+            repr = String.format("\u03c1[%s]( %s )", repl, getChild().toString());
         }
         return repr;
     }

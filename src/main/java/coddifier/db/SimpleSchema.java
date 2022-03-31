@@ -1,35 +1,62 @@
 package coddifier.db;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SimpleSchema implements Schema {
-    private final Map<String, Set<Attribute>> schema = new HashMap<>();
+    private final Map<String, Set<Attribute>> schema;
 
-    public Set<Attribute> addTable(String tableName, Set<Attribute> attributes) {
-        return schema.put(tableName, attributes);
+    private SimpleSchema(Map<String, Set<Attribute>> schema) {
+        this.schema = schema;
+    }
+
+    public static class Builder {
+        private final Map<String, Set<Attribute>> schema = new HashMap<>();
+
+        public Set<Attribute> addTable(String tableName, Set<Attribute> attributes) {
+            return schema.put(tableName, attributes);
+        }
+
+        public Set<Attribute> addTable(String tableName, Attribute ...attributes) {
+            return schema.put(tableName, new HashSet<>(Arrays.asList(attributes)));
+        }
+
+        public Schema build() {
+            return new SimpleSchema(schema);
+        }
     }
 
     @Override
-    public Set<String> getTableAttributeNames(String tableName) {
-        if (!hasTable(tableName)) {
+    public Set<String> getRelationAttributeNames(String relation) {
+        if (!hasRelation(relation)) {
             throw new SchemaException();  // table not present in the schema
         }
-        return schema.get(tableName).stream().map(Attribute::getName).collect(Collectors.toSet());
+        return schema.get(relation).stream().map(Attribute::getName).collect(Collectors.toSet());
     }
 
     @Override
-    public Set<String> getTableNullableAttributeNames(String tableName) {
-        if (!hasTable(tableName)) {
+    public Set<String> getRelationNullableAttributeNames(String relation) {
+        if (!hasRelation(relation)) {
             throw new SchemaException();  // table not present in the schema
         }
-        return schema.get(tableName).stream().filter(Attribute::getIsNullable).map(Attribute::getName).collect(Collectors.toSet());
+        return schema.get(relation).stream().filter(Attribute::getIsNullable).map(Attribute::getName).collect(Collectors.toSet());
     }
 
     @Override
-    public boolean hasTable(String tableName) {
-        return schema.containsKey(tableName);
+    public boolean hasRelation(String relation) {
+        return schema.containsKey(relation);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SimpleSchema)) return false;
+        SimpleSchema that = (SimpleSchema) o;
+        return schema.equals(that.schema);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(schema);
     }
 }

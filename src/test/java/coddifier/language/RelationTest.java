@@ -1,6 +1,7 @@
 package coddifier.language;
 
 import coddifier.db.Attribute;
+import coddifier.db.Schema;
 import coddifier.db.SimpleSchema;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,20 +14,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RelationTest {
 
-    static SimpleSchema schema;
+    static Schema schema;
     static Relation relationR;
     static Relation relationS;
 
     @BeforeAll
     static void setUpAll() {
-        schema = new SimpleSchema();
-        schema.addTable("R", Set.of(
+        var sb = new SimpleSchema.Builder();
+        sb.addTable("R", Set.of(
                 new Attribute("A", true),
                 new Attribute("B", false)
         ));
-        schema.addTable("S", Set.of(
+        sb.addTable("S", Set.of(
                 new Attribute("A", false)
         ));
+        schema = sb.build();
 
         relationR  = new Relation("R");
         relationS  = new Relation("S");
@@ -90,7 +92,7 @@ class RelationTest {
 
     @Test
     void test_isMarked() {
-        assertTrue(relationR.isMarked());
+        assertTrue(relationR.satisfiesSufficientConditions());
     }
 
     @Test

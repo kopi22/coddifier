@@ -21,7 +21,7 @@ public class Selection extends UnaryExpression {
     }
 
     @Override
-    protected boolean isMarked() {
+    protected boolean satisfiesSufficientConditions() {
         return true;
     }
 
