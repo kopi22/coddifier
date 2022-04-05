@@ -1,7 +1,6 @@
 package coddifier;
 
 import coddifier.db.Schema;
-import coddifier.db.SchemaException;
 import coddifier.language.Expression;
 import coddifier.transformations.*;
 
