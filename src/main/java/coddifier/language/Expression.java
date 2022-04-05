@@ -58,8 +58,6 @@ public abstract class Expression {
     }
 
     private boolean isSyntaxTreeMarked() {
-        System.out.println(this);
-        System.out.printf("djn: %s, nnc: %s, djb: %s, nna: %s, is_marked: %s%n", djn, nnc, djb, nna, satisfiesSufficientConditions());
         if (!satisfiesSufficientConditions()) {
             // if the node is not marked, then query does not meet sufficient conditions
             return false;
