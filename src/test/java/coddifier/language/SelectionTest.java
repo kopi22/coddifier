@@ -69,8 +69,20 @@ class SelectionTest {
     }
 
     @Test
-    void isWellDefined() {
+    void isWellDefined_true() {
+        assertTrue(selection.isWellDefined(schema));
+    }
 
+    @Test
+    void isWellDefined_falseChild() {
+        var illdefinedSelection = new Selection(condition, new Relation("Q"));
+        assertFalse(illdefinedSelection.isWellDefined(schema));
+    }
+
+    @Test
+    void isWellDefined_falseCondition() {
+        var illdefinedSelection = new Selection(conditionNotWellDefined, relationR);
+        assertFalse(illdefinedSelection.isWellDefined(schema));
     }
 
     @Test

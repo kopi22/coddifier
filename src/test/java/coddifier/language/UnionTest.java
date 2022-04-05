@@ -67,35 +67,39 @@ class UnionTest {
     @Test
     void isMarked_djb() {
         var union = new Union(relationR, relationS);
-        assertTrue(union.satisfiesDJB());
+        union.isGuaranteedToPreserveCoddSemantics(schema);
+        assertTrue(union.djb);
         assertTrue(union.satisfiesSufficientConditions());
     }
 
     @Test
     void isMarked_nnc() {
         var union = new Union(relationR, relationT);
-        assertTrue(union.satisfiesNNC(schema));
+        union.isGuaranteedToPreserveCoddSemantics(schema);
+        assertTrue(union.nnc);
         assertTrue(union.satisfiesSufficientConditions());
     }
 
     @Test
     void isMarked_nna_ancestor() {
-        var union = new Union(relationR, relationS);
-        assertTrue(union.satisfiesNNA(schema, true));
+        var union = new Union(relationR, relationR);
+        new Intersection(union, relationT).isGuaranteedToPreserveCoddSemantics(schema);  // needed to propagate NNA condition
+        assertTrue(union.nna);
         assertTrue(union.satisfiesSufficientConditions());
     }
 
     @Test
     void isMarked_nna_self() {
         var union = new Union(relationT, relationT);
-        assertTrue(union.satisfiesNNA(schema, false));
+        union.isGuaranteedToPreserveCoddSemantics(schema);
+        assertTrue(union.nna);
         assertTrue(union.satisfiesSufficientConditions());
     }
 
     @Test
     void isMarked_false() {
         var union = new Union(relationR, relationR);
-        union.isGuaranteedToPreserveCoddSemantics(schema);
+        assertFalse(union.isGuaranteedToPreserveCoddSemantics(schema));
         assertFalse(union.satisfiesSufficientConditions());
     }
 
