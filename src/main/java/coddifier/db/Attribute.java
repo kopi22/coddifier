@@ -29,7 +29,7 @@ public class Attribute {
         if (this == o) return true;
         if (!(o instanceof Attribute)) return false;
         Attribute attribute = (Attribute) o;
-        return isNullable == attribute.isNullable && name.equals(attribute.name);
+        return name.equals(attribute.name) && isNullable == attribute.isNullable;
     }
 
     @Override
