@@ -14,11 +14,12 @@ public class Product extends BinaryExpression {
 
     @Override
     public boolean isWellDefined(Schema schema) {
+        if (!(getLeftChild().isWellDefined(schema) && getRightChild().isWellDefined(schema))) {
+            return false;
+        }
         var commonSig = new HashSet<>(getLeftChild().getSignature(schema));
         commonSig.retainAll(getRightChild().getSignature(schema));
-        return getLeftChild().isWellDefined(schema)
-                && getRightChild().isWellDefined(schema)
-                && commonSig.isEmpty();
+        return commonSig.isEmpty();
     }
 
     @Override
