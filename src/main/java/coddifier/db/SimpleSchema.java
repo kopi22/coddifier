@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 public class SimpleSchema implements Schema {
     private final Map<String, Set<Attribute>> schema;
+    private int hash;
 
     private SimpleSchema(Map<String, Set<Attribute>> schema) {
         this.schema = schema;
@@ -13,15 +14,17 @@ public class SimpleSchema implements Schema {
     public static class Builder {
         private final Map<String, Set<Attribute>> schema = new HashMap<>();
 
-        public Set<Attribute> addTable(String tableName, Set<Attribute> attributes) {
-            return schema.put(tableName, attributes);
+        public Builder addTable(String tableName, Set<Attribute> attributes) {
+            schema.put(tableName, attributes);
+            return this;
         }
 
-        public Set<Attribute> addTable(String tableName, Attribute ...attributes) {
-            return schema.put(tableName, new HashSet<>(Arrays.asList(attributes)));
+        public Builder addTable(String tableName, Attribute ...attributes) {
+            schema.put(tableName, new HashSet<>(Arrays.asList(attributes)));
+            return this;
         }
 
-        public Schema build() {
+        public SimpleSchema build() {
             return new SimpleSchema(schema);
         }
     }
@@ -57,6 +60,9 @@ public class SimpleSchema implements Schema {
 
     @Override
     public int hashCode() {
-        return Objects.hash(schema);
+        if (hash == 0) {
+            hash = Objects.hash(schema);
+        }
+        return hash;
     }
 }
