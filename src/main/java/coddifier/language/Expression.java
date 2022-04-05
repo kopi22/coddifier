@@ -13,7 +13,7 @@ public abstract class Expression {
     // as expressions are immutable, their properties can be cached
     private final Map<Schema, Set<String>> signatureCache = new HashMap<>();
     private final Map<Schema, Set<String>> nullableSignatureCache = new HashMap<>();
-    private final Set<String> baseCache = new HashSet<>();
+    private Set<String> baseCache;
 
     protected boolean djb = false;
     protected boolean djn = false;
@@ -21,7 +21,7 @@ public abstract class Expression {
     protected boolean nna = false;
 
     protected Expression(List<Expression> children) {
-        this.children = children;
+        this.children = Collections.unmodifiableList(children);
     }
 
     public List<Expression> getChildren() {
@@ -43,7 +43,7 @@ public abstract class Expression {
         // step 3: annotate syntax tree
         annotateWithSufficientConditions(schema, false);
 
-        // step 3: check if every node meets its sufficient condition
+        // step 4: check if every node meets its sufficient condition
         return isSyntaxTreeMarked();
     }
 
@@ -147,32 +147,22 @@ public abstract class Expression {
     }
 
     public Set<String> getSignature(Schema schema) {
-        var sig = signatureCache.computeIfAbsent(schema, this::computeSignature);
-        if (sig == null) {
-            signatureCache.remove(schema);
-            throw new SchemaException();
-        }
-        return sig;
+        return signatureCache.computeIfAbsent(schema, s -> Collections.unmodifiableSet(computeSignature(s)));
     }
 
     protected abstract Set<String> computeSignature(Schema schema);
 
     public Set<String> getNullableSignature(Schema schema) {
-        var nsig = nullableSignatureCache.computeIfAbsent(schema, this::computeNullableSignature);
-        if (nsig == null) {
-            signatureCache.remove(schema);
-            throw new SchemaException();
-        }
-        return nsig;
+        return nullableSignatureCache.computeIfAbsent(schema, s -> Collections.unmodifiableSet(computeNullableSignature(s)));
     }
 
     protected abstract Set<String> computeNullableSignature(Schema schema);
 
     public Set<String> getBaseNames() {
-        if (baseCache.isEmpty()) {
-            baseCache.addAll(computeBaseNames());
+        if (baseCache == null) {
+            baseCache = Collections.unmodifiableSet(computeBaseNames());
         }
-        return new HashSet<>(baseCache);
+        return baseCache;
     }
 
     protected Set<String> computeBaseNames() {
