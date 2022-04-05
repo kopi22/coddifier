@@ -7,7 +7,6 @@ import coddifier.db.SimpleSchema;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -183,5 +182,19 @@ class ExpressionTest {
             Set.of("R", "S", "T", "U"),
             expression.computeBaseNames()
         );
+    }
+
+    @Test
+    void testHashCode_sameExprHaveTheSameHash() {
+        var intersection1 = new Intersection(relationR, relationS);
+        var intersection2 = new Intersection(new Relation("R"), new Relation("S"));
+        assertEquals(intersection1.hashCode(), intersection1.hashCode());
+        assertEquals(intersection1.hashCode(), intersection2.hashCode());
+    }
+
+    // for the sake of completness - to cover a branch in equals method
+    @Test
+    void testEquals_notAExpression() {
+        assertNotEquals(relationR, "R");
     }
 }

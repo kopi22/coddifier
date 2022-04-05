@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -103,7 +104,13 @@ class RenamingTest {
     }
 
     @Test
+    void testClone_throwsAssertion() {
+        assertThrows(AssertionError.class, () -> renaming.clone(List.of(relationR, relationR)));
+        assertThrows(AssertionError.class, () -> renaming.clone(Collections.emptyList()));
+    }
+
+    @Test
     void testToString() {
-        assert renaming.toString().equals("\u03c1[A->C,B->D]( R )") || renaming.toString().equals("\u03c1[B->D,A->C]( R )");
+        assertEquals("\u03c1[A->C,B->D]( R )", renaming.toString());
     }
 }

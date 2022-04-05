@@ -55,6 +55,7 @@ class SimpleSchemaTest {
                 .addTable("S", new Attribute("A", false), new Attribute("C", true))
                 .addTable("R", new Attribute("A", true), new Attribute("B", true))
                 .build();
+        assertEquals(schema, schema);
         assertEquals(schema, identicalSchema);
     }
 
@@ -80,6 +81,28 @@ class SimpleSchemaTest {
                 .addTable("T", new Attribute("A", true), new Attribute("B", true))
                 .build();
         assertNotEquals(schema, differentSchema);
+    }
+
+    // for the sake of completness - to cover a branch in equals method
+    @Test
+    void testEquals_notSimpleSchema() {
+        var unimplementedSchema = new Schema() {
+            @Override
+            public boolean hasRelation(String relation) {
+                return false;
+            }
+
+            @Override
+            public Set<String> getRelationAttributeNames(String relation) {
+                return null;
+            }
+
+            @Override
+            public Set<String> getRelationNullableAttributeNames(String relation) {
+                return null;
+            }
+        };
+        assertNotEquals(schema, unimplementedSchema);
     }
 
     @Test

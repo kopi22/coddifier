@@ -4,7 +4,6 @@ import coddifier.db.Attribute;
 import coddifier.db.Schema;
 import coddifier.db.SimpleSchema;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

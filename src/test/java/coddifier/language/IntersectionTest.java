@@ -115,4 +115,10 @@ class IntersectionTest {
         var intersection = new Intersection(relationR, relationS, relationT);
         assertEquals("\u22C2( R , S , T )", intersection.toString());
     }
+
+    @Test
+    void testConstructorWithLessThanTwoChildren_throwsAssertionError() {
+        assertThrows(AssertionError.class, () -> new Intersection(new Relation("R")));
+        assertThrows(AssertionError.class, () -> new Intersection(List.of(new Relation("R"))));
+    }
 }

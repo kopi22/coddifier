@@ -1,6 +1,5 @@
 package coddifier.db;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,6 +34,7 @@ class AttributeTest {
     void testEquals_true() {
         var A1 = new Attribute("A");
         var A2 = new Attribute("A", true);
+        assertEquals(A1, A1);
         assertEquals(A1, A2);
     }
 
@@ -50,6 +50,13 @@ class AttributeTest {
         var A = new Attribute("A");
         var B = new Attribute("B");
         assertNotEquals(A, B);
+    }
+
+    // for the sake of completness - to cover a branch in equals method
+    @Test
+    void testEquals_notAttribute() {
+        var A = new Attribute("A");
+        assertNotEquals(A, "A");
     }
 
     @Test
