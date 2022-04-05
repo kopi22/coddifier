@@ -5,7 +5,7 @@ import coddifier.db.Schema;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class Projection extends UnaryExpression {
     private final Set<String> retainedAttributes;
@@ -47,7 +47,7 @@ public class Projection extends UnaryExpression {
     public String toString() {
         if (repr == null) {
             var sb = new StringBuilder();
-            repr = String.format("\u03C0[%s]( %s )", String.join(", ", retainedAttributes), getChild().toString());
+            repr = String.format("\u03C0[%s]( %s )", retainedAttributes.stream().sorted().collect(Collectors.joining(",")), getChild().toString());
         }
         return repr;
     }
