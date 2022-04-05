@@ -23,7 +23,10 @@ public class IntersectionDistributor implements ExpressionTransformation {
         // if the child node is an intersection, propagate over it
         var child = expression.getChildren().get(0);
         if (child instanceof Intersection) {
-            var newChildren = child.getChildren().stream().map(interChild -> expression.clone(List.of(interChild))).collect(Collectors.toList());
+            var newChildren = child.getChildren().stream()
+                    .map(interChild -> expression.clone(List.of(interChild)))   // wrap each child with op
+                    .map(this::transform)                                       // try to propagate new children
+                    .collect(Collectors.toList());
             return new Intersection(newChildren);
         }
 
