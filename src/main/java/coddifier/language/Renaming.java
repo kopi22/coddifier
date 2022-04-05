@@ -1,7 +1,6 @@
 package coddifier.language;
 
 import coddifier.db.Schema;
-import coddifier.db.SchemaException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,9 +37,6 @@ public class Renaming extends UnaryExpression {
     protected Set<String> computeSignature(Schema schema) {
         var newAttributes = new HashSet<>(getChild().getSignature(schema));
         for (var renaming : renamings.entrySet()) {
-            if (!newAttributes.contains(renaming.getKey())) {
-                throw new SchemaException();
-            }
             newAttributes.remove(renaming.getKey());
             newAttributes.add(renaming.getValue());
         }
@@ -80,7 +76,7 @@ public class Renaming extends UnaryExpression {
     @Override
     public String toString() {
         if (repr == null) {
-            String repl = new TreeMap<>(renamings).entrySet().stream().map(e -> e.getKey() + "->" + e.getValue()).collect(Collectors.joining(","));
+            String repl = renamings.entrySet().stream().map(e -> e.getKey() + "->" + e.getValue()).sorted().collect(Collectors.joining(","));
             repr = String.format("\u03c1[%s]( %s )", repl, getChild().toString());
         }
         return repr;

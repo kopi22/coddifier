@@ -9,6 +9,7 @@ public abstract class Expression {
     protected final List<Expression> children;
 
     protected String repr;
+    private int hash;
 
     // as expressions are immutable, their properties can be cached
     private final Map<Schema, Set<String>> signatureCache = new HashMap<>();
@@ -177,8 +178,10 @@ public abstract class Expression {
 
     @Override
     public int hashCode() {
-        // TODO: incorporate expression type into the hash
-        return Objects.hash(children);
+        if (hash == 0) {
+            hash = Objects.hash(toString());
+        }
+        return hash;
     }
 
     @Override

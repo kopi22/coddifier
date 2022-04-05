@@ -46,7 +46,6 @@ public class Projection extends UnaryExpression {
     @Override
     public String toString() {
         if (repr == null) {
-            var sb = new StringBuilder();
             repr = String.format("\u03C0[%s]( %s )", retainedAttributes.stream().sorted().collect(Collectors.joining(",")), getChild().toString());
         }
         return repr;
